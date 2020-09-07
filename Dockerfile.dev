@@ -1,0 +1,19 @@
+FROM node:14
+
+# Copy package.json file into container
+COPY package.json package.json
+COPY package-lock.json package-lock.json
+
+# Install node modules
+RUN npm install && \
+    npm install --only=dev && \
+    npm cache clean --force --loglevel=error
+
+# Volume to mount source code into container
+VOLUME [ "/client" ]
+
+# move to the source code directory
+WORKDIR /client
+
+# Start the client
+CMD mv ../node_modules . && npm run-script start

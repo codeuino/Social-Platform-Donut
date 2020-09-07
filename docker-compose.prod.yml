@@ -1,0 +1,14 @@
+version: "3"
+services:
+  client:
+    container_name: client-production
+    restart: always
+    expose: 
+      - "80"
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    volumes:
+      - ./:/client
+    ports:
+      - "80:80"

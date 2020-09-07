@@ -1,0 +1,37 @@
+name: donut-client-image-ci
+
+on:
+  push:
+    branches:
+      - development
+
+    tags:
+      - v*
+
+env:
+  IMAGE_NAME: donut-client:latest
+  REPO_NAME: codeuino1
+  REGISTRY_NAME: registry.hub.docker.com
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build image
+        run: docker build . --file Dockerfile.prod --tag $IMAGE_NAME
+
+      - name: Log into registry
+        run: echo "{{ secrets.DOCKER_PASSWORD }}" | docker login -u {{ secrets.DOCKER_USERNAME }} --password-stdin
+
+      - name: Push image
+        run: |
+          IMAGE_ID=$REGISTRY_NAME/$REPO_NAME/$IMAGE_NAME
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
+          docker tag $IMAGE_NAME $IMAGE_ID:latest
+          docker push $IMAGE_ID:$VERSION

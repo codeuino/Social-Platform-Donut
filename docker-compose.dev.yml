@@ -1,0 +1,16 @@
+version: "3"
+services:
+  client:
+    container_name: client
+    restart: always
+    expose: 
+      - "3000"
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./:/client
+    ports:
+      - "3000:3000"
+    stdin_open: true
+    tty: true  

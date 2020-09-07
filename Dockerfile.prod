@@ -1,0 +1,21 @@
+FROM node:14 as builder
+
+WORKDIR /server
+
+RUN git clone https://github.com/codeuino/social-platform-donut-frontend.git
+
+WORKDIR /server/social-platform-donut-frontend
+
+RUN npm install && \
+    npm cache clean --force --loglevel=error
+
+RUN npm run-script build
+
+#------------------------------ Production
+FROM nginx:alpine as production
+
+# copy static files
+COPY --from=builder /server/social-platform-donut-frontend/build /usr/share/nginx/html
+
+# Expose ports
+EXPOSE 80
