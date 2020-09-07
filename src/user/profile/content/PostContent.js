@@ -68,7 +68,7 @@ class PostContent extends Component {
               </div>
 
               <div className="content-card-body simple-text-card">
-                <p>{post?.content}</p>
+                <p>{parse(String(post?.content))}</p>
               </div>
             </div>
 
