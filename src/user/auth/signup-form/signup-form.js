@@ -56,7 +56,7 @@ class SignUpForm extends Component {
         break;
       }
       case "password": {
-        validPass = value.length >= 6;
+        validPass = value.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/i);
         break;
       }
       case "phone": {
@@ -266,7 +266,7 @@ class SignUpForm extends Component {
               <ul className="list-unstyled">
                 <li id="validation_msg">
                   {!isValidPassword
-                    ? "Should be at least 6 characters long!"
+                    ? "Should be at least 8 characters long! and should contain a uppercase letter,a lowercase letter,a number and a special character."
                     : null}
                 </li>
               </ul>
